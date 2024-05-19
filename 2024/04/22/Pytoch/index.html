@@ -25,9 +25,9 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/1_pytoch.jpg">
 <meta property="article:published_time" content="2024-04-22T05:55:25.000Z">
-<meta property="article:modified_time" content="2024-05-19T12:19:35.370Z">
+<meta property="article:modified_time" content="2024-05-19T15:51:19.783Z">
 <meta property="article:author" content="Xi Wang">
-<meta property="article:tag" content="Code">
+<meta property="article:tag" content="code">
 <meta property="article:tag" content="PyTorch">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://example.com/img/1_pytoch.jpg">
@@ -279,7 +279,9 @@
                 <p>路漫漫其修远兮。</p>
 <span id="more"></span>
 
-<!-- It's ashamed to realized the importance of systematically learning PyTorch now. However, there will never be an earlier time than today, so I will try my best start learning from now on. Reference materials include: -->
+<!-- It's ashamed to realized the importance of systematically learning PyTorch now. However, there will never be an earlier time than today, so I will try my best start learning from now on.  -->
+
+<p>Reference materials include:</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/">PyTorch官方文档(中文版)</a></li>
 <li><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/">tutorials</a></li>
@@ -303,22 +305,15 @@
 <h3 id="2-1-张量基础"><a href="#2-1-张量基础" class="headerlink" title="2.1 张量基础"></a>2.1 张量基础</h3><p>Python列表或数字元组（tuple）是在内存中单独分配的Python对象的集合；而PyTorch张量或NumPy数组（通常）是连续内存块上的视图（view），这些内存块存有未封装（unboxed）的C数值类型。<br><strong>获取一个张量的形状：tensor.shape</strong></p>
 <h3 id="2-2-张量与存储"><a href="#2-2-张量与存储" class="headerlink" title="2.2 张量与存储"></a>2.2 张量与存储</h3><p>基础内存只分配一次，由torch.Storage实例管理，<strong>Storage是一个一维的数值数据数组</strong>，例如一块包含了指定类型（可能是float或int32）数字的连续内存块。<strong>而tensor可以看作是某个Storage实例的视图。</strong>因此多个tensor可以索引到同一Storage。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br>points = torch.tensor([[<span class="hljs-number">1.0</span>, <span class="hljs-number">4.0</span>], [<span class="hljs-number">2.0</span>, <span class="hljs-number">1.0</span>], [<span class="hljs-number">3.0</span>, <span class="hljs-number">5.0</span>]])<br>points.storage()<br><br><span class="hljs-comment"># 输出</span><br> <span class="hljs-number">1.0</span><br> <span class="hljs-number">4.0</span><br> <span class="hljs-number">2.0</span><br> <span class="hljs-number">1.0</span><br> <span class="hljs-number">3.0</span><br> <span class="hljs-number">5.0</span><br>[torch.FloatStorage of size <span class="hljs-number">6</span>]<br></code></pre></td></tr></table></figure>
-<p><strong>无法使用两个索引来索引二维tensor的存储，因为Storage始终是一维的，与引用它的任何张量的维数无关。</strong></p>
-<p><img src="https://tangshusen.me/Deep-Learning-with-PyTorch-Chinese/img/chapter2/2.4.png" srcset="/img/loading.gif" lazyload alt="张量是一个存储实例的视图"></p>
-<h3 id="2-3-尺寸、存储偏移与步长"><a href="#2-3-尺寸、存储偏移与步长" class="headerlink" title="2.3 尺寸、存储偏移与步长"></a>2.3 尺寸、存储偏移与步长</h3><p><img src="https://tangshusen.me/Deep-Learning-with-PyTorch-Chinese/img/chapter2/2.5.png" srcset="/img/loading.gif" lazyload alt="张量的尺寸、偏移与步长之间的关系"><br>tensor可以看作是某个Storage实例的视图。为了索引Storage，张量依赖于几条明确定义它们的信息：尺寸（size）、存储偏移（storage offset）和步长（stride）</p>
-<ul>
-<li>尺寸是一个元组，表示tensor每个维度上有多少个元素。</li>
-<li>存储偏移是Storage中与张量中的第一个元素相对应的索引。</li>
-<li>步长是在Storage中为了沿每个维度获取下一个元素而需要跳过的元素数量。<ul>
-<li>步长是一个元组，表示当索引在每个维度上增加1时必须跳过的存储中元素的数量。</li>
-</ul>
-</li>
-<li>shape是属性，size()是类，这俩包含的信息相同。</li>
-</ul>
-<p>用下标<code>i</code>和<code>j</code>访问二维张量等价于访问存储中的<code>storage_offset + stride[0] * i + stride[1] * j</code>元素。</p>
-<p>张量Tensor和和存储Storage之间的这种间接操作会使某些操作（例如转置或提取子张量）的代价很小，因为<strong>它们不会导致内存重新分配</strong>；相反，它们（仅仅）分配一个新的张量对象，该对象具有不同的尺寸、存储偏移或步长。更改子张量同时也会对原始张量产生影响。所以我们可以克隆子张量得到新的张量（以避免这种影响）：<code>tensor.clone()</code>.Tensor的转置只改变尺寸和步长。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">some_tensor = torch.ones(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)<br>some_tensor.shape, some_tensor.stride()<br><span class="hljs-comment"># 输出</span><br>(torch.Size([<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]), (<span class="hljs-number">20</span>, <span class="hljs-number">5</span>, <span class="hljs-number">1</span>))<br><br>some_tensor_t = some_tensor.transpose(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>)<br>some_tensor_t.shape, some_tensor_t.stride()<br><span class="hljs-comment"># 输出</span><br>(torch.Size([<span class="hljs-number">5</span>, <span class="hljs-number">4</span>, <span class="hljs-number">3</span>]), (<span class="hljs-number">1</span>, <span class="hljs-number">5</span>, <span class="hljs-number">20</span>))<br></code></pre></td></tr></table></figure>
+<p> <strong>无法使用两个索引来索引二维tensor的存储，因为Storage始终是一维的，与引用它的任何张量的维数无关。</strong><br><img src="https://tangshusen.me/Deep-Learning-with-PyTorch-Chinese/img/chapter2/2.4.png" srcset="/img/loading.gif" lazyload alt="张量是一个存储实例的视图"></p>
+<h3 id="2-3-尺寸、存储偏移与步长"><a href="#2-3-尺寸、存储偏移与步长" class="headerlink" title="2.3 尺寸、存储偏移与步长"></a>2.3 尺寸、存储偏移与步长</h3><p><img src="https://tangshusen.me/Deep-Learning-with-PyTorch-Chinese/img/chapter2/2.5.png" srcset="/img/loading.gif" lazyload alt="张量的尺寸、偏移与步长之间的关系"><br>tensor可以看作是某个Storage实例的视图。为了索引Storage，张量依赖于几条明确定义它们的信息：尺寸（size）、存储偏移（storage offset）和步长（stride）<br>    - 尺寸是一个元组，表示tensor每个维度上有多少个元素。<br>    - 存储偏移是Storage中与张量中的第一个元素相对应的索引。<br>        - 步长是在Storage中为了沿每个维度获取下一个元素而需要跳过的元素数量。<br>        - 步长是一个元组，表示当索引在每个维度上增加1时必须跳过的存储中元素的数量。<br>    - shape是属性，size()是类，这俩包含的信息相同。</p>
+<p>用下标<code>i</code>和<code>j</code>访问二维张量等价于访问存储中的<code>storage_offset + stride[0] * i + stride[1] * j</code>元素。<br>张量Tensor和和存储Storage之间的这种间接操作会使某些操作（例如转置或提取子张量）的代价很小，因为<strong>它们不会导致内存重新分配</strong>；相反，它们（仅仅）分配一个新的张量对象，该对象具有不同的尺寸、存储偏移或步长。更改子张量同时也会对原始张量产生影响。所以我们可以克隆子张量得到新的张量（以避免这种影响）：<code>tensor.clone()</code>.Tensor的转置只改变尺寸和步长。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">some_tensor = torch.ones(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)<br>some_tensor.shape, some_tensor.stride()<br><span class="hljs-comment"># 输出</span><br>(torch.Size([<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]), (<span class="hljs-number">20</span>, <span class="hljs-number">5</span>, <span class="hljs-number">1</span>))<br><br>some_tensor_t = some_tensor.transpose(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>)<br>some_tensor_t.shape, some_tensor_t.stride()<br><span class="hljs-comment"># 输出</span><br>(torch.Size([<span class="hljs-number">5</span>, <span class="hljs-number">4</span>, <span class="hljs-number">3</span>]), (<span class="hljs-number">1</span>, <span class="hljs-number">5</span>, <span class="hljs-number">20</span>))<br><br></code></pre></td></tr></table></figure>
+
 <h3 id="2-4-数据类型"><a href="#2-4-数据类型" class="headerlink" title="2.4 数据类型"></a>2.4 数据类型</h3><!-- ### Run server
+
+
+<!-- ### Run server
 
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
 
@@ -341,7 +336,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Code/" class="print-no-link">#Code</a>
+        <a href="/tags/code/" class="print-no-link">#code</a>
       
         <a href="/tags/PyTorch/" class="print-no-link">#PyTorch</a>
       
@@ -672,5 +667,5 @@
   <noscript>
     <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
   </noscript>
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"right","width":180,"height":360,"hOffset":20,"vOffset":0},"mobile":{"show":false},"react":{"opacityDefault":1,"opacityOnHover":1},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"right","width":200,"height":400,"hOffset":20,"vOffset":0},"mobile":{"show":false},"react":{"opacityDefault":1,"opacityOnHover":1},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>
