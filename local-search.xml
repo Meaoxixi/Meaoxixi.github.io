@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>Userful tools</title>
+    <link href="/2024/05/22/Userful-tools/"/>
+    <url>/2024/05/22/Userful-tools/</url>
+    
+    <content type="html"><![CDATA[<p>工欲善其事必先利其器</p><span id="more"></span><h1 id="1-笔记管理"><a href="#1-笔记管理" class="headerlink" title="1 笔记管理"></a>1 笔记管理</h1><p><a href="https://www.notion.so/">Notion</a></p><h1 id="2-作图"><a href="#2-作图" class="headerlink" title="2 作图"></a>2 作图</h1><p>大家好像主要都是Visio，PPT为辅（我觉得PhotoShop也很方便，嘻嘻嘻感觉冥冥之中当年钻研摄影帮了我好多好多）</p><h2 id="2-1-首先是工具推荐"><a href="#2-1-首先是工具推荐" class="headerlink" title="2.1 首先是工具推荐"></a>2.1 首先是工具推荐</h2><ul><li><a href="https://app.diagrams.net/">draw.io</a></li><li><a href="https://github.com/guanyingc/latex_paper_writing_tips">Tips for Writing a Research Paper using LaTeX</a>:由陈冠英老师维护，给LaTeX初学者提供多个图表排版的例子，方便用到自己的论文当中。还有种会议poster的例子，可以参考。</li><li><a href="https://github.com/dair-ai/ml-visuals">ML Visuals</a>:里面包含100多个常用的神经网络的图，是google在线PPT的形式.<a href="https://docs.google.com/presentation/d/11mR1nkIR9fbHegFkcFq8z9oDQ5sjv8E3JJp1LfLGKuk/edit#slide=id.p">PPT直接下载</a></li><li><a href="https://www.iconfont.cn/search/index?searchType=icon&q=%E9%87%91%E5%B8%81&page=1&fromCollection=-1&fills=&tag=">阿里巴巴矢量图标素材库</a></li><li><a href="http://alexlenail.me/NN-SVG/index.html">NN SVG</a>:画神经网络结构用的。左侧是一些设置选项，可以自己设置节点，层数，还有网络类型等等，设置好以后可以把这个神经网络图直接下载下来，然后插入到visio或者PPT中就可以用了！</li><li><code>ChatHub</code>：是一个基于谷歌Chrome浏览器插件的chatbot聚合客户端，你可以用它在一个应用中使用多种AI聊天服务。</li><li><code>Code Interpreter</code>：OpenAI 的官方插件，通过设置中的Beta面板向所有ChatGPT Plus 用户提供。可以数据分析、创建图表、编辑文件、执行数学运算等。可惜要花钱，但它有以下优点：<ul><li>Code Interpreter 允许 AI 做数学题（非常复杂的数学题）和做更精确的文字工作（比如实际计算段落中的字数），因为它可以编写 Python 代码来解决大语言模型在数学和语言方面的固有弱点。</li><li>Code Interpreter 降低了幻觉和迷惑的概率。</li><li>Code Interpreter 让人工智能的用途更加广泛。</li><li>用户不必编程，因为 Code Interpreter 可以代替做所有的工作。</li><li>它给了你更多的 AI Moment。</li></ul></li><li><a href="https://github.com/OpenBMB/MiniCPM-V">视觉问答领域开源项目</a></li></ul><h2 id="2-2-简单聊聊目前对作图的认知"><a href="#2-2-简单聊聊目前对作图的认知" class="headerlink" title="2.2 简单聊聊目前对作图的认知"></a>2.2 简单聊聊目前对作图的认知</h2><p>我感觉审稿人看论文是（就连我自己看论文的时候都是）挑重点看，如果图能把你想表达的观点说清楚，文字写得不好其实问题不大，毕竟文字表达一个个磨非常耗费心力和时间。而且人的注意力天生就是喜欢看图。而且画图其实蛮享受的，它是一个把你的思路显现出来的过程，喜欢。</p><p>但无论是哪种图，配色一般是淡蓝、淡红、淡黄、淡绿四种（彩虹一共才7种颜色，要体现对比就只能是这四种颜色了，而且你需要考虑一下有人红绿色盲 … … ），然后有时会用紫色、灰色补充（紫色多用于模块，灰色多用于小区域或者大面积打底）。整个论文的配色风格需要一致，比如说后面的折线图、柱状图、散点图最好还是以前面框架的颜色一致。</p><p>经过一次投稿，CV感觉只需要两种图，框架图和数据展示图。审美相关，这里安利一下，感觉Yongming Rao老师的图好好看：<br><img src="https://pic4.zhimg.com/80/v2-917d709c464f873d5876ab9665435543_720w.webp"></p><h1 id="3-论文"><a href="#3-论文" class="headerlink" title="3 论文"></a>3 论文</h1><p>-<a href="http://www.researchrabbitapp.com/">Research Rabbit</a>:文献检索及可视化工具，它使用 AI 帮助我们发现相关且有趣的研究文章, 这些文章是根据我们的研究方向来关联的。<a href="https://zhuanlan.zhihu.com/p/394423702">使用教程</a></p><ul><li><a href="https://www.connectedpapers.com/">connectedpapers</a>:相似论文查找</li><li><a href="https://www.scholar-inbox.com/">scholar-inbox</a>:论文推荐</li></ul><h1 id="4-汇报"><a href="#4-汇报" class="headerlink" title="4 汇报"></a>4 汇报</h1><ul><li><a href="https://zhiwen.xfyun.cn/">讯飞智文-AI在线生成PPT、Word</a></li></ul>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>Tutorial</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Configure online demo</title>
     <link href="/2024/05/19/onlineDemo/"/>
     <url>/2024/05/19/onlineDemo/</url>
