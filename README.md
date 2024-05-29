@@ -1,14 +1,10 @@
 # Meao's Blog 
-进一步有一步的欢喜。
+Every single day counts.
 
 ## Yoo, I'm Xi Wang | 王茜 👋
-
-Thia is my personal blog where I document my learning, work, and life. Here, I share experiences and insights in fields like computer vision, image generation, and codeing. Feel free to visit and engage with me!
-
-I'm a first-year Master's student in the [Interdisciplinary Intelligent Graphics Group (IIGG)](https://yang-group.github.io/#/) at Jilin University, happily guided by the  Associate Professor [Xi Yang](https://keepthinkingyx.github.io/Xi-Yang/).
+I'm a first-year Master's student in the [Interdisciplinary Intelligent Graphics Group (IIGG)](https://yang-group.github.io/#/) at Jilin University, happily guided by the  Associate Professor [Xi Yang](https://keepthinkingyx.github.io/Xi-Yang/). Thia is my personal blog where I document my learning, work, and life. Here, I share experiences and insights in fields like computer vision, image generation, and codeing. 
 
 🖋I graduated from Jilin University in 2023 with a Bachelor's degree in Software Engineering. My research interests focus on the computer vision and image processing. Right now, I'm working on image generation tasks with diffusion models. If you're also interested in this exciting work and looking for any kind of academic collaboration, let's team up and become research buddies! You're welcome to get in touch with me at `qianwang23@mails.jlu.edu.cn` 🍻 .
-
 
 # Research
 - [2024/04/20] 🔥 FilterPrompt: Guiding Image Transfer in Diffusion Models. [Project Page](https://meaoxixi.github.io/FilterPrompt/).
@@ -26,6 +22,6 @@ I'm a first-year Master's student in the [Interdisciplinary Intelligent Graphics
 
 ---
 # Education
-- 🏃Sep. 2023 - Jun. 2026: Studying at [IIGG](https://yang-group.github.io/#/), supervised by [Xi Yang](https://keepthinkingyx.github.io/Xi-Yang/) 
+- 🏃Sep. 2023 - Jun. 2026: Studying at [IIGG](https://yang-group.github.io/#/), Jilin University. Supervised by Associate Professor [Xi Yang](https://keepthinkingyx.github.io/Xi-Yang/) 
 - ✍️Sep. 2019 - Jun. 2023: Graduated with a Bachelor's degree from [College of Software](https://csw.jlu.edu.cn/), Jilin University.
 
