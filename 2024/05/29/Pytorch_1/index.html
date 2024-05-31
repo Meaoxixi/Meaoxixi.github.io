@@ -24,7 +24,7 @@
 <meta property="og:description" content="本篇章主要记录的是官网提供的Tutorials的重要内容，是Pytorch探索之旅的第2篇章啦！">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-05-29T03:19:25.000Z">
-<meta property="article:modified_time" content="2024-05-30T07:24:07.859Z">
+<meta property="article:modified_time" content="2024-05-31T13:41:27.670Z">
 <meta property="article:author" content="Xi Wang">
 <meta property="article:tag" content="PyTorch">
 <meta name="twitter:card" content="summary_large_image">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          779 words
+          815 words
         
       </span>
     
@@ -326,8 +326,15 @@
 <h1 id="4-Transformers"><a href="#4-Transformers" class="headerlink" title="4 Transformers"></a>4 Transformers</h1><p>We use transforms to perform some manipulation of the data and make it suitable for training. All TorchVision datasets have two parameters <code>transform</code> to modify the features and <code>target_transform</code> to modify the labels that accept callables containing the transformation logic. <a target="_blank" rel="noopener" href="https://pytorch.org/vision/stable/transforms.html">More resource in torchvision.transforms module </a></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">from</span> torchvision <span class="hljs-keyword">import</span> datasets<br><span class="hljs-keyword">from</span> torchvision.transforms <span class="hljs-keyword">import</span> ToTensor, Lambda<br><br>ds = datasets.FashionMNIST(<br>    root=<span class="hljs-string">&quot;data&quot;</span>,<br>    train=<span class="hljs-literal">True</span>,<br>    download=<span class="hljs-literal">True</span>,<br>    transform=ToTensor(),<br>    <span class="hljs-comment"># Lambda transforms apply any user-defined lambda function. </span><br>    target_transform=Lambda(<span class="hljs-keyword">lambda</span> y: torch.zeros(<span class="hljs-number">10</span>, dtype=torch.<span class="hljs-built_in">float</span>).scatter_(<span class="hljs-number">0</span>, torch.tensor(y), value=<span class="hljs-number">1</span>))<br>)<br></code></pre></td></tr></table></figure>
 
-<h1 id="5-Build-Model"><a href="#5-Build-Model" class="headerlink" title="5 Build Model"></a>5 Build Model</h1><p><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html">https://pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html</a></p>
-<h1 id="6-Automatic-Differentiation"><a href="#6-Automatic-Differentiation" class="headerlink" title="6 Automatic Differentiation"></a>6 Automatic Differentiation</h1><h1 id="7-Optimization-Loop"><a href="#7-Optimization-Loop" class="headerlink" title="7 Optimization Loop"></a>7 Optimization Loop</h1><h1 id="8-Save-Load-and-Use-Model"><a href="#8-Save-Load-and-Use-Model" class="headerlink" title="8 Save, Load and Use Model"></a>8 Save, Load and Use Model</h1>
+<h1 id="5-Build-Model"><a href="#5-Build-Model" class="headerlink" title="5 Build Model"></a>5 Build Model</h1><ul>
+<li>The <code>nn.Flatten</code> layer converts each 2D 28x28 image into a contiguous array of 784 pixel values.</li>
+<li>The <code>nn.Linear</code> layer is a module that applies a linear transformation on the input using its stored weights and biases.</li>
+<li>The <code>nn.ReLU</code> creates the complex mappings between the model’s inputs and outputs.</li>
+<li><code>nn.Sequential</code> is an ordered container of modules.<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python">seq_modules = nn.Sequential(<br>    flatten,<br>    layer1,<br>    nn.ReLU(),<br>    nn.Linear(<span class="hljs-number">20</span>, <span class="hljs-number">10</span>)<br>)<br>input_image = torch.rand(<span class="hljs-number">3</span>,<span class="hljs-number">28</span>,<span class="hljs-number">28</span>)<br>logits = seq_modules(input_image)<br></code></pre></td></tr></table></figure></li>
+<li><code>nn.Softmax</code> : The logits are scaled to values [0, 1] representing the model’s predicted probabilities for each class.</li>
+</ul>
+<h1 id="6-Automatic-Differentiation"><a href="#6-Automatic-Differentiation" class="headerlink" title="6 Automatic Differentiation"></a>6 Automatic Differentiation</h1><p><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html">https://pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html</a></p>
+<h1 id="7-Optimization-Loop"><a href="#7-Optimization-Loop" class="headerlink" title="7 Optimization Loop"></a>7 Optimization Loop</h1><h1 id="8-Save-Load-and-Use-Model"><a href="#8-Save-Load-and-Use-Model" class="headerlink" title="8 Save, Load and Use Model"></a>8 Save, Load and Use Model</h1>
                 
               </div>
             
