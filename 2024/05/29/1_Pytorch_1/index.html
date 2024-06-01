@@ -19,12 +19,12 @@
     <meta name="description" content="本篇章主要记录的是官网提供的Tutorials的重要内容，是Pytorch探索之旅的第2篇章啦！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PyTorch_《Tutorials》">
-<meta property="og:url" content="http://example.com/2024/05/29/Pytorch_1/index.html">
+<meta property="og:url" content="http://example.com/2024/05/29/1_Pytorch_1/index.html">
 <meta property="og:site_name" content="Xi Wang">
 <meta property="og:description" content="本篇章主要记录的是官网提供的Tutorials的重要内容，是Pytorch探索之旅的第2篇章啦！">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-05-29T03:19:25.000Z">
-<meta property="article:modified_time" content="2024-05-31T13:41:27.670Z">
+<meta property="article:modified_time" content="2024-06-01T08:45:08.391Z">
 <meta property="article:author" content="Xi Wang">
 <meta property="article:tag" content="PyTorch">
 <meta name="twitter:card" content="summary_large_image">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          815 words
+          877 words
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          7 mins
+          8 mins
         
       </span>
     
@@ -333,8 +333,24 @@
 <li><code>nn.Sequential</code> is an ordered container of modules.<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python">seq_modules = nn.Sequential(<br>    flatten,<br>    layer1,<br>    nn.ReLU(),<br>    nn.Linear(<span class="hljs-number">20</span>, <span class="hljs-number">10</span>)<br>)<br>input_image = torch.rand(<span class="hljs-number">3</span>,<span class="hljs-number">28</span>,<span class="hljs-number">28</span>)<br>logits = seq_modules(input_image)<br></code></pre></td></tr></table></figure></li>
 <li><code>nn.Softmax</code> : The logits are scaled to values [0, 1] representing the model’s predicted probabilities for each class.</li>
 </ul>
-<h1 id="6-Automatic-Differentiation"><a href="#6-Automatic-Differentiation" class="headerlink" title="6 Automatic Differentiation"></a>6 Automatic Differentiation</h1><p><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html">https://pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html</a></p>
-<h1 id="7-Optimization-Loop"><a href="#7-Optimization-Loop" class="headerlink" title="7 Optimization Loop"></a>7 Optimization Loop</h1><h1 id="8-Save-Load-and-Use-Model"><a href="#8-Save-Load-and-Use-Model" class="headerlink" title="8 Save, Load and Use Model"></a>8 Save, Load and Use Model</h1>
+<h1 id="6-Automatic-Differentiation"><a href="#6-Automatic-Differentiation" class="headerlink" title="6 Automatic Differentiation"></a>6 Automatic Differentiation</h1><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/notes/autograd.html">Autograd mechanics</a></p>
+<h1 id="7-Optimization-Loop"><a href="#7-Optimization-Loop" class="headerlink" title="7 Optimization Loop"></a>7 Optimization Loop</h1><p>Training a model is an iterative process; in each iteration the model makes a guess about the output, calculates the error in its guess (loss), collects the derivatives of the error with respect to its parameters (as we saw in the previous section), and optimizes these parameters using gradient descent.<br>We define the following hyperparameters for training:</p>
+<ul>
+<li><strong>Number of Epochs</strong>: the number times to iterate over the dataset</li>
+<li><strong>Batch Size</strong>: the number of data samples propagated through the network before the parameters are updated</li>
+<li><strong>Learning Rate</strong>: how much to update models parameters at each batch&#x2F;epoch. Smaller values yield slow learning speed, while large values may result in unpredictable behavior during training</li>
+</ul>
+<p>Each iteration of the optimization loop is called an epoch.And it  consists of two main parts: </p>
+<ul>
+<li>The Train Loop：iterate over the training dataset and try to converge to optimal parameters.</li>
+<li>The Validation&#x2F;Test Loop：iterate over the test dataset to check if model performance is improving.</li>
+</ul>
+<p>Common loss functions include <code>nn.MSELoss</code> (Mean Square Error) for regression tasks, and <code>nn.NLLLoss</code> (Negative Log Likelihood) for classification. <code>nn.CrossEntropyLoss</code> combines <code>nn.LogSoftmax</code> and <code>nn.NLLLoss</code>.</p>
+<p>Optimization is the process of adjusting model parameters to reduce model error in each training step. </p>
+<iframe width="560" height="315" src="https://youtu.be/tIeHLnjs5U8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<h1 id="8-Save-Load-and-Use-Model"><a href="#8-Save-Load-and-Use-Model" class="headerlink" title="8 Save, Load and Use Model"></a>8 Save, Load and Use Model</h1><p>PyTorch models store the learned parameters in an internal state dictionary, called <code>state_dict</code>. These can be persisted via the <code>torch.save</code> method:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">model = models.vgg16(weights=<span class="hljs-string">&#x27;IMAGENET1K_V1&#x27;</span>)<br>torch.save(model.state_dict(), <span class="hljs-string">&#x27;model_weights.pth&#x27;</span>)<br><br><span class="hljs-comment"># To load model weights, you need to create an instance of the same model first, and then load the parameters </span><br>model.load_state_dict(torch.load(<span class="hljs-string">&#x27;model_weights.pth&#x27;</span>))<br><span class="hljs-comment"># be sure to call model.eval() method before inferencing to set the dropout and batch normalization layers to evaluation mode.</span><br>model.<span class="hljs-built_in">eval</span>()<br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -387,7 +403,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>PyTorch_《Tutorials》</div>
-      <div>http://example.com/2024/05/29/Pytorch_1/</div>
+      <div>http://example.com/2024/05/29/1_Pytorch_1/</div>
     </div>
     <div class="license-meta">
       
@@ -431,11 +447,17 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2024/06/01/4_Linear-Algebra/" title="Linear Algebra">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linear Algebra</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/05/22/Userful-tools/" title="Userful tools">
+                      <a href="/2024/05/22/3_Userful-tools/" title="Userful tools">
                         <span class="hidden-mobile">Userful tools</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
