@@ -16,15 +16,15 @@
   <meta name="author" content="Xi Wang">
   <meta name="keywords" content="">
   
-    <meta name="description" content="本篇章主要记录的是官网提供的Tutorials的重要内容，是Pytorch探索之旅的第2篇章啦！">
+    <meta name="description" content="本篇章主要记录的是官网提供的Tutorials和PyTorch官方文档(中文版)的重要内容，是Pytorch探索之旅的第2篇章啦！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PyTorch_《Tutorials》">
 <meta property="og:url" content="http://example.com/2024/05/29/1_Pytorch_1/index.html">
 <meta property="og:site_name" content="Xi Wang">
-<meta property="og:description" content="本篇章主要记录的是官网提供的Tutorials的重要内容，是Pytorch探索之旅的第2篇章啦！">
+<meta property="og:description" content="本篇章主要记录的是官网提供的Tutorials和PyTorch官方文档(中文版)的重要内容，是Pytorch探索之旅的第2篇章啦！">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-05-29T03:19:25.000Z">
-<meta property="article:modified_time" content="2024-06-01T08:45:08.391Z">
+<meta property="article:modified_time" content="2024-06-02T10:59:05.299Z">
 <meta property="article:author" content="Xi Wang">
 <meta property="article:tag" content="PyTorch">
 <meta name="twitter:card" content="summary_large_image">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          877 words
+          1.4k words
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          8 mins
+          12 mins
         
       </span>
     
@@ -273,13 +273,13 @@
             
               <div class="markdown-body">
                 
-                <p>本篇章主要记录的是官网提供的<a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/">Tutorials</a>的重要内容，是Pytorch探索之旅的第2篇章啦！</p>
+                <p>本篇章主要记录的是官网提供的<a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/">Tutorials</a>和<a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/">PyTorch官方文档(中文版)</a>的重要内容，是Pytorch探索之旅的第2篇章啦！</p>
 <span id="more"></span>
 
 <p>Reference materials include:</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/">PyTorch官方文档(中文版)</a></li>
-<li><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/">Tutorials</a></li>
+<li><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/">PyTorch官方文档(中文版)</a>: 我感觉这个文档的好处在于非常详尽的给出相关函数和模块的细致化定义介绍</li>
+<li><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/">Tutorials</a>：感觉官网的这个文档是从Pytorch的使用框架去简要介绍</li>
 <li>Andrew W. Traska撰写的<a target="_blank" rel="noopener" href="https://www.manning.com/books/grokking-deep-learning">《Grokking Deep Learning》</a>是开发强大模型和理解深度神经网络基础机制的重要资源</li>
 <li>Ian Goodfellow, Yoshua Bengio和Aaron Courville的<a target="_blank" rel="noopener" href="https://www.deeplearningbook.org/">《Deep Learning》</a></li>
 <li>清华翻译的<a target="_blank" rel="noopener" href="https://tangshusen.me/Deep-Learning-with-PyTorch-Chinese/">《Deep learning with PyTorch》</a></li>
@@ -351,6 +351,20 @@
 
 <h1 id="8-Save-Load-and-Use-Model"><a href="#8-Save-Load-and-Use-Model" class="headerlink" title="8 Save, Load and Use Model"></a>8 Save, Load and Use Model</h1><p>PyTorch models store the learned parameters in an internal state dictionary, called <code>state_dict</code>. These can be persisted via the <code>torch.save</code> method:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">model = models.vgg16(weights=<span class="hljs-string">&#x27;IMAGENET1K_V1&#x27;</span>)<br>torch.save(model.state_dict(), <span class="hljs-string">&#x27;model_weights.pth&#x27;</span>)<br><br><span class="hljs-comment"># To load model weights, you need to create an instance of the same model first, and then load the parameters </span><br>model.load_state_dict(torch.load(<span class="hljs-string">&#x27;model_weights.pth&#x27;</span>))<br><span class="hljs-comment"># be sure to call model.eval() method before inferencing to set the dropout and batch normalization layers to evaluation mode.</span><br>model.<span class="hljs-built_in">eval</span>()<br></code></pre></td></tr></table></figure>
+
+<h1 id="9-PACKAGE参考"><a href="#9-PACKAGE参考" class="headerlink" title="9 PACKAGE参考"></a>9 PACKAGE参考</h1><h2 id="9-1-torch"><a href="#9-1-torch" class="headerlink" title="9.1 torch"></a>9.1 torch</h2><p><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/package_references/torch/">torch</a>包含了多维张量的数据结构以及基于其上的多种数学操作。另外，它也提供了多种工具，其中一些可以更有效地对张量和任意类型进行序列化。</p>
+<ul>
+<li><code>torch.eye(n, m=None, out=None)</code>: 返回一个nxn的2维张量，对角线位置全1，其它位置全0</li>
+<li><code>torch.linspace(start, end, steps=100, out=None)</code>: 返回一个1维张量，包含在区间start和end上均匀间隔的steps个点。 输出1维张量的长度为steps</li>
+<li><code>torch.randn(*sizes, out=None)</code>: 返回一个张量，包含了从标准正态分布(均值为0，方差为 1，即高斯白噪声)中抽取一组随机数，形状由可变参数sizes定义</li>
+<li><code>torch.chunk(tensor, chunks, dim=0)</code>: 在给定维度(轴)上将输入张量进行分块儿</li>
+<li><code>torch.index_select(input, dim, index, out=None)</code>: 沿着指定维度对输入进行切片，取index中指定的相应项(index为一个LongTensor)，然后返回到一个新的张量， 返回的张量与原始张量_Tensor_有相同的维度(在指定轴上)。<strong>注意： 返回的张量不与原始张量共享内存空间</strong></li>
+<li><code>torch.stack(sequence, dim=0)</code>: 沿着一个新维度对输入张量序列进行连接。 序列中所有的张量都应该为相同形状<br>！注意： 会改变tensor的函数操作会用一个下划线后缀来标示。比如，torch.FloatTensor.abs_()会在原地计算绝对值，并返回改变后的tensor，而tensor.FloatTensor.abs()将会在一个新的tensor中计算结果。</li>
+</ul>
+<h2 id="9-2-torch-Tensor"><a href="#9-2-torch-Tensor" class="headerlink" title="9.2 torch.Tensor"></a>9.2 torch.Tensor</h2><p><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/package_references/Tensor/">torch.Tensor</a>是一种包含单一数据类型元素的多维矩阵。</p>
+<h2 id="9-3-torch-Storage"><a href="#9-3-torch-Storage" class="headerlink" title="9.3 torch.Storage"></a>9.3 torch.Storage</h2><p><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/package_references/Storage/">torch.Storage</a>是一个单一数据类型的连续一维数组。</p>
+<h2 id="9-4-torch-nn"><a href="#9-4-torch-nn" class="headerlink" title="9.4 torch.nn"></a>9.4 torch.nn</h2><p><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/package_references/torch-nn/#_1">torch.nn</a></p>
+
                 
               </div>
             
