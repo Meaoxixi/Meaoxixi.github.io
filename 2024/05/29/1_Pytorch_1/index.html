@@ -24,7 +24,7 @@
 <meta property="og:description" content="本篇章主要记录的是官网提供的Tutorials和PyTorch官方文档(中文版)的重要内容，是Pytorch探索之旅的第2篇章啦！">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-05-29T03:19:25.000Z">
-<meta property="article:modified_time" content="2024-06-02T10:59:05.299Z">
+<meta property="article:modified_time" content="2024-06-03T01:42:31.383Z">
 <meta property="article:author" content="Xi Wang">
 <meta property="article:tag" content="PyTorch">
 <meta name="twitter:card" content="summary_large_image">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.4k words
+          2.9k words
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          12 mins
+          25 mins
         
       </span>
     
@@ -353,14 +353,104 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">model = models.vgg16(weights=<span class="hljs-string">&#x27;IMAGENET1K_V1&#x27;</span>)<br>torch.save(model.state_dict(), <span class="hljs-string">&#x27;model_weights.pth&#x27;</span>)<br><br><span class="hljs-comment"># To load model weights, you need to create an instance of the same model first, and then load the parameters </span><br>model.load_state_dict(torch.load(<span class="hljs-string">&#x27;model_weights.pth&#x27;</span>))<br><span class="hljs-comment"># be sure to call model.eval() method before inferencing to set the dropout and batch normalization layers to evaluation mode.</span><br>model.<span class="hljs-built_in">eval</span>()<br></code></pre></td></tr></table></figure>
 
 <h1 id="9-PACKAGE参考"><a href="#9-PACKAGE参考" class="headerlink" title="9 PACKAGE参考"></a>9 PACKAGE参考</h1><h2 id="9-1-torch"><a href="#9-1-torch" class="headerlink" title="9.1 torch"></a>9.1 torch</h2><p><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/package_references/torch/">torch</a>包含了多维张量的数据结构以及基于其上的多种数学操作。另外，它也提供了多种工具，其中一些可以更有效地对张量和任意类型进行序列化。</p>
-<ul>
-<li><code>torch.eye(n, m=None, out=None)</code>: 返回一个nxn的2维张量，对角线位置全1，其它位置全0</li>
-<li><code>torch.linspace(start, end, steps=100, out=None)</code>: 返回一个1维张量，包含在区间start和end上均匀间隔的steps个点。 输出1维张量的长度为steps</li>
-<li><code>torch.randn(*sizes, out=None)</code>: 返回一个张量，包含了从标准正态分布(均值为0，方差为 1，即高斯白噪声)中抽取一组随机数，形状由可变参数sizes定义</li>
-<li><code>torch.chunk(tensor, chunks, dim=0)</code>: 在给定维度(轴)上将输入张量进行分块儿</li>
-<li><code>torch.index_select(input, dim, index, out=None)</code>: 沿着指定维度对输入进行切片，取index中指定的相应项(index为一个LongTensor)，然后返回到一个新的张量， 返回的张量与原始张量_Tensor_有相同的维度(在指定轴上)。<strong>注意： 返回的张量不与原始张量共享内存空间</strong></li>
-<li><code>torch.stack(sequence, dim=0)</code>: 沿着一个新维度对输入张量序列进行连接。 序列中所有的张量都应该为相同形状<br>！注意： 会改变tensor的函数操作会用一个下划线后缀来标示。比如，torch.FloatTensor.abs_()会在原地计算绝对值，并返回改变后的tensor，而tensor.FloatTensor.abs()将会在一个新的tensor中计算结果。</li>
+<h3 id="9-1-1-Tensor"><a href="#9-1-1-Tensor" class="headerlink" title="9.1.1 Tensor"></a>9.1.1 Tensor</h3><ul>
+<li><code>torch.is_tensor(obj)</code></li>
+<li><code>torch.is_storage(obj)</code></li>
+<li><code>torch.numel(input)</code>: 返回input张量中的元素个数</li>
+<li><code>torch.set_printoptions(precision=None, threshold=None, edgeitems=None, linewidth=None, profile=None)</code><ul>
+<li>设置打印选项。</li>
+<li>precision：浮点数输出的精度位数 (默认为8)</li>
+<li>threshold：阈值，触发汇总显示而不是完全显示(repr)的数组元素的总数 （默认为1000）</li>
+<li>edgeitems：汇总显示中，每维（轴）两端显示的项数（默认值为3）</li>
+<li>linewidth：用于插入行间隔的每行字符数（默认为80）。Thresholded matricies will ignore this parameter.</li>
+<li>profile：pretty打印的完全默认值。 可以覆盖上述所有选项 (默认为short, full)</li>
 </ul>
+</li>
+</ul>
+<h3 id="9-1-2-创建操作"><a href="#9-1-2-创建操作" class="headerlink" title="9.1.2 创建操作"></a>9.1.2 创建操作</h3><ul>
+<li><code>torch.eye(n, m=None, out=None)</code>: 返回一个nxn的2维张量，对角线位置全1，其它位置全0</li>
+<li><code>torch.from_numpy(ndarray)</code></li>
+<li><code>torch.linspace(start, end, steps=100, out=None)</code>: 返回一个1维张量，包含在区间start和end上均匀间隔的steps个点。 输出1维张量的长度为steps</li>
+<li><code>torch.logspace(start, end, steps=100, out=None)</code></li>
+<li><code>torch.ones(*sizes, out=None)</code></li>
+<li><code>torch.rand(*sizes, out=None)</code>: 返回一个张量，包含了从区间<code>[0,1)</code>的均匀分布中抽取的一组随机数，形状由可变参数sizes 定义</li>
+<li><code>torch.randn(*sizes, out=None)</code>: 返回一个张量，包含了从标准正态分布(均值为0，方差为 1，即高斯白噪声)中抽取一组随机数，形状由可变参数sizes定义</li>
+<li><code>torch.randperm(n, out=None)</code>: 给定参数n，返回一个从0 到n -1 的随机整数排列</li>
+<li><code>torch.arange(start, end, step=1, out=None)</code>: 包含从start到end，以step为步长的一组序列值(默认步长为1)</li>
+<li><code>torch.zeros(*sizes, out=None)</code></li>
+</ul>
+<h3 id="9-1-3-索引-切片-连接-换位"><a href="#9-1-3-索引-切片-连接-换位" class="headerlink" title="9.1.3 索引,切片,连接,换位"></a>9.1.3 索引,切片,连接,换位</h3><ul>
+<li><code>torch.cat(inputs, dimension=0)</code></li>
+<li><code>torch.chunk(tensor, chunks, dim=0)</code>: 在给定维度(轴)上将输入张量进行分块儿</li>
+<li><code>torch.gather(input, dim, index, out=None)</code>: 沿给定轴dim，将输入索引张量index指定位置的值进行聚合</li>
+<li><code>torch.index_select(input, dim, index, out=None)</code>: 沿着指定维度对输入进行切片，取index中指定的相应项(index为一个LongTensor)，然后返回到一个新的张量， 返回的张量与原始张量_Tensor_有相同的维度(在指定轴上)。<strong>注意： 返回的张量不与原始张量共享内存空间</strong></li>
+<li><code>torch.masked_select(input, mask, out=None)</code></li>
+<li><code>torch.nonzero(input, out=None)</code>: 返回一个包含输入input中非零元素索引的张量</li>
+<li><code>torch.split(tensor, split_size, dim=0)</code>: 将输入张量分割成相等形状的chunks（如果可分）</li>
+<li><code>torch.squeeze(input, dim=None, out=None)</code>: 将输入张量形状中的1去除并返回</li>
+<li><code>torch.stack(sequence, dim=0)</code>: 沿着一个新维度对输入张量序列进行连接。 序列中所有的张量都应该为相同形状</li>
+<li><code>torch.t</code>: 输入一个矩阵（2维张量），并转置0, 1维。 可以被视为函数<code>transpose(input, 0, 1)</code>的简写函数</li>
+<li><code>torch.transpose(input, dim0, dim1, out=None)</code>: 返回输入矩阵input的转置。交换维度dim0和dim1。 输出张量与输入张量共享内存，所以改变其中一个会导致另外一个也被修改</li>
+<li><code>torch.unbind</code>: 移除指定维后，返回一个元组，包含了沿着指定维切片后的各个切片</li>
+<li><code>torch.unsqueeze(input, dim, out=None)</code>: 返回一个新的张量，对输入的制定位置插入维度 1</li>
+</ul>
+<h3 id="9-1-4-随机抽样"><a href="#9-1-4-随机抽样" class="headerlink" title="9.1.4 随机抽样"></a>9.1.4 随机抽样</h3><ul>
+<li><code>torch.manual_seed(seed)</code></li>
+<li><code>torch.initial_seed()</code></li>
+<li><code>torch.get_rng_state()</code></li>
+<li><code>torch.set_rng_state(new_state)</code></li>
+<li><code>torch.default_generator = &lt;torch._C.Generator object&gt;</code></li>
+<li><code>torch.bernoulli(input, out=None)</code>: 从伯努利分布中抽取二元随机数(0 或者 1)。输入张量须包含用于抽取上述二元随机值的概率</li>
+<li><code>torch.multinomial(input, num_samples,replacement=False, out=None)</code>: 返回一个张量，每行包含从input相应行中定义的多项分布中抽取的num_samples个样本</li>
+<li><code>torch.normal(means, std, out=None)</code>: 返回一个张量，包含从给定参数means,std的离散正态分布中抽取随机数</li>
+</ul>
+<h3 id="9-1-5-序列化"><a href="#9-1-5-序列化" class="headerlink" title="9.1.5 序列化"></a>9.1.5 序列化</h3><ul>
+<li><code>torch.save(obj, f, pickle_module=&lt;module &#39;pickle&#39; from &#39;/home/jenkins/miniconda/lib/python3.5/pickle.py&#39;&gt;, pickle_protocol=2)</code>: 保存一个对象到一个硬盘文件上</li>
+<li><code>torch.load</code></li>
+</ul>
+<h3 id="9-1-6-并行化"><a href="#9-1-6-并行化" class="headerlink" title="9.1.6 并行化"></a>9.1.6 并行化</h3><ul>
+<li><code>torch.get_num_threads()</code>：获得用于并行化CPU操作的OpenMP线程数</li>
+<li><code>torch.set_num_threads()</code>: 设定用于并行化CPU操作的OpenMP线程数</li>
+</ul>
+<h3 id="9-1-7-数学操作"><a href="#9-1-7-数学操作" class="headerlink" title="9.1.7 数学操作"></a>9.1.7 数学操作</h3><ul>
+<li><code>torch.abs(input, out=None)</code>: 计算输入张量的每个元素绝对值</li>
+<li><code>torch.sin(input, out=None)</code></li>
+<li><code>torch.sinh(input, out=None)</code>: 双曲正弦</li>
+<li><code>torch.cos(input, out=None)</code>: 返回一个新张量，包含输入input张量每个元素的余弦</li>
+<li><code>torch.cosh(input, out=None)</code>: 双曲余弦</li>
+<li><code>torch.tan(input, out=None)</code></li>
+<li><code>torch.tanh(input, out=None)</code>:双曲正切</li>
+<li><code>torch.acos(input, out=None)</code>: 返回一个新张量，包含输入张量每个元素的反余弦</li>
+<li><code>torch.asin(input, out=None)</code>: 返回一个新张量，包含输入input张量每个元素的反正弦函数</li>
+<li><code>torch.atan(input, out=None)</code>: 返回一个新张量，包含输入input张量每个元素的反正切函数</li>
+<li><code>torch.atan2(input1, input2, out=None)</code>: 返回一个新张量，包含两个输入张量input1和input2的反正切函数</li>
+<li><code>torch.add(input, value, out=None)</code></li>
+<li><code>torch.addcdiv(tensor, value=1, tensor1, tensor2, out=None)</code>: 用tensor2对tensor1逐元素相除，然后乘以标量值value 并加到tensor</li>
+<li><code>torch.addcmul(tensor, value=1, tensor1, tensor2, out=None)</code>: 用tensor2对tensor1逐元素相乘，并对结果乘以标量值value然后加到tensor</li>
+<li><code>torch.ceil(input, out=None)</code>: 天井函数，对输入input张量每个元素向上取整, 即取不小于每个元素的最小整数，并返回结果到输出</li>
+<li><code>torch.floor(input, out=None)</code>: 床函数,返回一个新张量，包含输入input张量每个元素的floor，即不小于元素的最大整数</li>
+<li><code>torch.round(input, out=None)</code>: 返回一个新张量，将输入input张量每个元素舍入到最近的整数</li>
+<li><code>torch.sign(input, out=None)</code>: 符号函数：返回一个新张量，包含输入input张量每个元素的正负</li>
+<li><code>torch.trunc(input, out=None)</code>: 返回一个新张量，包含输入input张量每个元素的截断值(标量x的截断值是最接近其的整数，其比x更接近零。简而言之，有符号数的小数部分被舍弃)</li>
+<li><code>torch.clamp(input, min, max, out=None)</code>: 将输入input张量每个元素的夹紧到区间 [min,max]，并返回结果到一个新张量</li>
+<li><code>torch.div(input, value, out=None)</code>: 将input逐元素除以标量值value，并返回结果到输出张量out</li>
+<li><code>torch.exp(tensor, out=None)</code>: 返回一个新张量，包含输入input张量每个元素的指数</li>
+<li><code>torch.fmod(input, divisor, out=None)</code>: 计算除法余数，其结果的符号与 input 相同</li>
+<li><code>torch.remainder(input, divisor, out=None)</code>: 返回一个新张量，包含输入input张量每个元素的除法余数，其结果与 divisor 相同</li>
+<li><code>torch.frac(tensor, out=None)</code>: 返回每个元素的分数部分</li>
+<li><code>torch.lerp(start, end, weight, out=None)</code>: 对两个张量以start，end做线性插值， 将结果返回到输出张量。out &#x3D; start +weight * (end - start)</li>
+<li><code>torch.log(input, out=None)</code>: 计算input的自然对数</li>
+<li><code>torch.log1p(input, out=None) </code>: 计算input+1的自然对数</li>
+<li><code>torch.mul(input, value, out=None)</code>: 用标量值value乘以输入input的每个元素，并返回一个新的结果张量</li>
+<li><code>torch.neg(input, out=None)</code>: 返回一个新张量，包含输入input张量按元素取负</li>
+<li><code>torch.pow(input, exponent, out=None)</code>: 对输入input的按元素求exponent次幂值，并返回结果张量</li>
+<li><code>torch.reciprocal(input, out=None)</code>: 倒数</li>
+<li><code>torch.rsqrt(input, out=None)</code>: 平方根倒数</li>
+<li><code>torch.sqrt(input, out=None)</code>: 平方根</li>
+<li><code>torch.sigmoid(input, out=None)</code></li>
+</ul>
+<h3 id="9-1-8-Reduction-Ops-缩减操作"><a href="#9-1-8-Reduction-Ops-缩减操作" class="headerlink" title="9.1.8 Reduction Ops(缩减操作)"></a>9.1.8 Reduction Ops(缩减操作)</h3><p><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/package_references/torch/">https://pytorch-cn.readthedocs.io/zh/latest/package_references/torch/</a></p>
+<p>！注意： 会改变tensor的函数操作会用一个下划线后缀来标示。比如，torch.FloatTensor.abs_()会在原地计算绝对值，并返回改变后的tensor，而tensor.FloatTensor.abs()将会在一个新的tensor中计算结果。</p>
 <h2 id="9-2-torch-Tensor"><a href="#9-2-torch-Tensor" class="headerlink" title="9.2 torch.Tensor"></a>9.2 torch.Tensor</h2><p><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/package_references/Tensor/">torch.Tensor</a>是一种包含单一数据类型元素的多维矩阵。</p>
 <h2 id="9-3-torch-Storage"><a href="#9-3-torch-Storage" class="headerlink" title="9.3 torch.Storage"></a>9.3 torch.Storage</h2><p><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/package_references/Storage/">torch.Storage</a>是一个单一数据类型的连续一维数组。</p>
 <h2 id="9-4-torch-nn"><a href="#9-4-torch-nn" class="headerlink" title="9.4 torch.nn"></a>9.4 torch.nn</h2><p><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/package_references/torch-nn/#_1">torch.nn</a></p>
