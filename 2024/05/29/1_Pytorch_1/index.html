@@ -24,7 +24,7 @@
 <meta property="og:description" content="本篇章主要记录的是官网提供的Tutorials和PyTorch官方文档(中文版)的重要内容，是Pytorch探索之旅的第2篇章啦！">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-05-29T03:19:25.000Z">
-<meta property="article:modified_time" content="2024-06-03T01:42:31.383Z">
+<meta property="article:modified_time" content="2024-06-04T00:41:59.559Z">
 <meta property="article:author" content="Xi Wang">
 <meta property="article:tag" content="PyTorch">
 <meta name="twitter:card" content="summary_large_image">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.9k words
+          4.1k words
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          25 mins
+          35 mins
         
       </span>
     
@@ -449,9 +449,83 @@
 <li><code>torch.sqrt(input, out=None)</code>: 平方根</li>
 <li><code>torch.sigmoid(input, out=None)</code></li>
 </ul>
-<h3 id="9-1-8-Reduction-Ops-缩减操作"><a href="#9-1-8-Reduction-Ops-缩减操作" class="headerlink" title="9.1.8 Reduction Ops(缩减操作)"></a>9.1.8 Reduction Ops(缩减操作)</h3><p><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/package_references/torch/">https://pytorch-cn.readthedocs.io/zh/latest/package_references/torch/</a></p>
-<p>！注意： 会改变tensor的函数操作会用一个下划线后缀来标示。比如，torch.FloatTensor.abs_()会在原地计算绝对值，并返回改变后的tensor，而tensor.FloatTensor.abs()将会在一个新的tensor中计算结果。</p>
+<h3 id="9-1-8-Reduction-Ops-缩减操作"><a href="#9-1-8-Reduction-Ops-缩减操作" class="headerlink" title="9.1.8 Reduction Ops(缩减操作)"></a>9.1.8 Reduction Ops(缩减操作)</h3><ul>
+<li><code>torch.cumprod(input, dim, out=None)</code>: 返回输入沿指定维度的累积</li>
+<li><code>torch.prod(input)</code>: 返回输入张量input 所有元素的积</li>
+<li><code>torch.cumsum(input, dim, out=None)</code>: 返回输入沿指定维度的累和</li>
+<li><code>torch.sum(input)</code>: 返回输入张量input 所有元素的和</li>
+<li><code>torch.dist(input, other, p=2, out=None)</code>: 返回 (input - other) 的 p范数</li>
+<li><code>torch.mean(input)</code></li>
+<li><code>torch.median(input, dim=-1, values=None, indices=None)</code>: 返回输入张量给定维度每行的中位数，同时返回一个包含中位数的索引的LongTensor</li>
+<li><code>torch.mode(input, dim=-1, values=None, indices=None)</code>: 返回给定维dim上，每行的众数值。 同时返回一个LongTensor，包含众数职的索引</li>
+<li><code>torch.norm(input, p=2)</code>: 返回输入张量input 的p 范数</li>
+<li><code>torch.std(input)</code>: 返回输入张量input 所有元素的标准差</li>
+<li><code>torch.var(input)</code>: 返回输入张量所有元素的方差</li>
+</ul>
+<h3 id="9-1-8-Comparison-Ops-比较操作"><a href="#9-1-8-Comparison-Ops-比较操作" class="headerlink" title="9.1.8 Comparison Ops(比较操作)"></a>9.1.8 Comparison Ops(比较操作)</h3><ul>
+<li><code>torch.eq(input, other, out=None)</code>：比较元素相等性, 返回一个<code>torch.ByteTensor</code>张量，包含了每个位置的比较结果(相等为1，不等为0 )</li>
+<li><code>torch.equal(tensor1, tensor2)</code>: 如果两个张量有相同的形状和元素值，则返回True ，否则 False</li>
+<li><code>torch.ge(input, other, out=None)</code>: 逐元素比较input和other，即是否 input&gt;&#x3D;other. 返回一个 torch.ByteTensor 张量，包含了每个位置的比较结果(是否 input &gt;&#x3D; other )</li>
+<li><code>torch.gt(input, other, out=None)</code>: 逐元素比较input和other ， 即是否input&gt;other. 如果两个张量有相同的形状和元素值，则返回True ，否则 False</li>
+<li><code>torch.le(input, other, out=None)</code>: 逐元素比较input和other ， 即是否input&lt;&#x3D;other</li>
+<li><code>torch.lt(input, other, out=None)</code>: 逐元素比较input和other ， 即是否 input &lt; other</li>
+<li><code>torch.ne(input, other, out=None)</code>: 逐元素比较input和other ， 即是否 input!&#x3D;other</li>
+<li><code>torch.kthvalue(input, k, dim=None, out=None)</code>: 取输入张量input指定维上第k 个最小值</li>
+<li><code>torch.max()</code></li>
+<li><code>torch.min(input)</code></li>
+<li><code>torch.sort(input, dim=None, descending=False, out=None)</code>: 对输入张量input沿着指定维按升序排序</li>
+<li><code>torch.topk(input, k, dim=None, largest=True, sorted=True, out=None)</code>: 沿给定dim维度返回输入张量input中 k 个最大值</li>
+</ul>
+<h3 id="9-1-9-Other-Operations-其他操作"><a href="#9-1-9-Other-Operations-其他操作" class="headerlink" title="9.1.9 Other Operations(其他操作)"></a>9.1.9 Other Operations(其他操作)</h3><ul>
+<li><code>torch.cross(input, other, dim=-1, out=None)</code>: 返回沿着维度dim上，两个张量input和other的向量积（叉积）</li>
+<li><code>torch.diag(input, diagonal=0, out=None)</code><ul>
+<li>如果输入是一个向量(1D 张量)，则返回一个以input为对角线元素的2D方阵</li>
+<li>如果输入是一个矩阵(2D 张量)，则返回一个包含input对角线元素的1D张量</li>
+</ul>
+</li>
+<li><code>torch.histc(input, bins=100, min=0, max=0, out=None)</code>: 计算输入张量的直方图. 如果min和max都为0, 则利用数据中的最大最小值作为边界</li>
+<li><code>torch.renorm(input, p, dim, maxnorm, out=None)</code>: 返回一个张量，包含规范化后的各个子张量，使得沿着dim维划分的各子张量的p范数小于maxnorm</li>
+<li><code>torch.trace(input)</code>: 返回输入2维矩阵对角线元素的和</li>
+<li><code>torch.tril(input, k=0, out=None)</code>: 返回一个张量out，包含输入矩阵(2D张量)的下三角部分，out其余部分被设为0</li>
+<li><code>torch.triu(input, k=0, out=None)</code>: 返回一个张量，包含输入矩阵(2D张量)的上三角部分，其余部分被设为0</li>
+</ul>
+<h3 id="9-1-10-BLAS-and-LAPACK-Operations"><a href="#9-1-10-BLAS-and-LAPACK-Operations" class="headerlink" title="9.1.10 BLAS and LAPACK Operations"></a>9.1.10 BLAS and LAPACK Operations</h3><ul>
+<li><code>torch.addbmm(beta=1, mat, alpha=1, batch1, batch2, out=None)</code>: 执行mat &#x3D; beta * mat + alpha * batch1.bmm(batch2) 操作。<ul>
+<li>mat：二维张量（n, p）</li>
+<li>batch1：三维张量（batch_size, n, m）</li>
+<li>batch2：三维张量（batch_size, m, p）</li>
+</ul>
+</li>
+<li><code>torch.baddbmm(beta=1, mat, alpha=1, batch1, batch2, out=None)</code>: 执行 mat &#x3D; beta * mat + alpha * torch.bmm(batch1, batch2) 操作<ul>
+<li>mat：三维张量（batch_size, n, p）</li>
+<li>batch1：三维张量（batch_size, n, m）</li>
+<li>batch2：三维张量（batch_size, m, p）</li>
+</ul>
+</li>
+<li><code>torch.bmm(batch1, batch2, out=None)</code>: 对存储在两个批batch1和batch2内的矩阵进行批矩阵乘操作<ul>
+<li>batch1：三维张量（batch_size, n, m）</li>
+<li>batch2：三维张量（batch_size, m, p）</li>
+</ul>
+</li>
+<li><code>torch.mm(mat1, mat2, out=None)</code>: 执行二维矩阵乘法</li>
+<li><code>torch.addmm(beta=1, mat, alpha=1, mat1, mat2, out=None)</code>: 适用于将批量矩阵乘法的结果与一个二维矩阵按比例相加</li>
+<li><code>torch.mv(mat, vec, out=None)</code>: 对矩阵mat和向量vec进行相乘</li>
+<li><code>torch.addmv(beta=1, tensor, alpha=1, mat, vec, out=None)</code>: 向量相乘</li>
+<li><code>torch.addr(beta=1, mat, alpha=1, vec1, vec2, out=None)</code>：张量积</li>
+<li><code>torch.btrifact(A, info=None)</code>: 返回一个元组，包含LU 分解和pivots</li>
+<li><code>torch.btrisolve(b, LU_data, LU_pivots)</code>: 返回线性方程组Ax&#x3D;b的LU解</li>
+<li><code>torch.dot(tensor1, tensor2)</code></li>
+<li><code>torch.eig(a, eigenvectors=False, out=None)</code>: 计算<strong>实方阵a</strong>的特征值和特征向量</li>
+<li><code>torch.gels(B, A, out=None)</code>: 对形如m×n的满秩矩阵a计算其最小二乘和最小范数问题的解</li>
+<li><code>torch.geqrf(input, out=None)</code>: 直接调用LAPACK的底层函数</li>
+<li><code>torch.ger(vec1, vec2, out=None)</code>: 计算两向量vec1,vec2的张量积</li>
+<li><code>torch.gesv(B, A, out=None)</code>: 返回线性方程组AX&#x3D;B的解</li>
+<li><code>torch.inverse(input, out=None)</code>: 对方阵输入input取逆</li>
+<li><code>torch.svd(input, some=True, out=None)</code>:  返回对形如<code>n×m</code>的实矩阵<code>A</code>进行奇异值分解的结果</li>
+<li><code>torch.symeig(input, eigenvectors=False, upper=True, out=None)</code>: 返回<strong>实对称矩阵</strong>input的特征值和特征向量</li>
+</ul>
 <h2 id="9-2-torch-Tensor"><a href="#9-2-torch-Tensor" class="headerlink" title="9.2 torch.Tensor"></a>9.2 torch.Tensor</h2><p><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/package_references/Tensor/">torch.Tensor</a>是一种包含单一数据类型元素的多维矩阵。</p>
+<p>！注意： 会改变tensor的函数操作会用一个下划线后缀来标示。比如，torch.FloatTensor.abs_()会在原地计算绝对值，并返回改变后的tensor，而tensor.FloatTensor.abs()将会在一个新的tensor中计算结果。</p>
 <h2 id="9-3-torch-Storage"><a href="#9-3-torch-Storage" class="headerlink" title="9.3 torch.Storage"></a>9.3 torch.Storage</h2><p><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/package_references/Storage/">torch.Storage</a>是一个单一数据类型的连续一维数组。</p>
 <h2 id="9-4-torch-nn"><a href="#9-4-torch-nn" class="headerlink" title="9.4 torch.nn"></a>9.4 torch.nn</h2><p><a target="_blank" rel="noopener" href="https://pytorch-cn.readthedocs.io/zh/latest/package_references/torch-nn/#_1">torch.nn</a></p>
 
