@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/img/Demo.jpg">
 <meta property="article:published_time" content="2024-05-19T11:48:29.000Z">
-<meta property="article:modified_time" content="2024-06-10T13:18:29.070Z">
+<meta property="article:modified_time" content="2024-06-16T10:34:15.973Z">
 <meta property="article:author" content="Xi Wang">
 <meta property="article:tag" content="Tools">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.6k words
+          2.2k words
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          22 mins
+          19 mins
         
       </span>
     
@@ -364,7 +364,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> gradio <span class="hljs-keyword">as</span> gr<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">greet</span>(<span class="hljs-params">name, intensity</span>):<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Hello, &quot;</span> + name + <span class="hljs-string">&quot;!&quot;</span> * <span class="hljs-built_in">int</span>(intensity)<br><br>demo = gr.Interface(<br>    fn=greet,<br>    inputs=[<span class="hljs-string">&quot;text&quot;</span>, <span class="hljs-string">&quot;slider&quot;</span>],<br>    outputs=[<span class="hljs-string">&quot;text&quot;</span>],<br>)<br><br>demo.launch()<br><br></code></pre></td></tr></table></figure>
 
 <h1 id="2-在线托管平台-HuggingFace"><a href="#2-在线托管平台-HuggingFace" class="headerlink" title="2 在线托管平台 HuggingFace"></a>2 在线托管平台 HuggingFace</h1><p>前文提到过通过在代码中设置<code>demo.launch(share=True)</code>就能生成一个共享链接形如：<a target="_blank" rel="noopener" href="https://07ff8706ab.gradio.live.虽然该链接是通过/">https://07ff8706ab.gradio.live。虽然该链接是通过</a> Gradio 共享服务器提供的免费公共 URL，但实际上跑代码的算力是我本地的服务器，同时共享链接将在 72 小时后过期。所以接下来的问题就是怎么在自己的云服务器上设置自己的共享服务器，这样才能突破链接的时间限制。而这就是HuggingFace可以干的事！Hugging Face Spaces 提供基础设施，进而可以免费永久托管机器学习模型！<br><a target="_blank" rel="noopener" href="https://huggingface.co/welcome">使用服务前，先注册账号（官网界面右上角”Sign Up”）</a></p>
-<h2 id="2-1-Hugging-Face-Spaces"><a href="#2-1-Hugging-Face-Spaces" class="headerlink" title="2.1 Hugging Face Spaces"></a>2.1 Hugging Face Spaces</h2><p><a target="_blank" rel="noopener" href="https://huggingface.co/docs/hub/spaces">Spaces文档</a><br>在HuggingFace官网登录账号后，切换到Spaces创建一个新的空间假设叫“DemoName”。先选”Gradio”和”Private”，以生成一个可使用的Gradio在线应用：<code>https://huggingface.co/spaces/YourUserName/DemoName</code>。每个项目空间默认免费配备8个CPU核和16GB 运行内存，GPU资源需要单独付费。</p>
+<h2 id="2-1-Hugging-Face-Spaces"><a href="#2-1-Hugging-Face-Spaces" class="headerlink" title="2.1 Hugging Face Spaces"></a>2.1 Hugging Face Spaces</h2><p><a target="_blank" rel="noopener" href="https://huggingface.co/docs/hub/spaces">Spaces文档</a><br>在HuggingFace官网登录账号后，切换到Spaces创建一个新的空间假设叫“DemoName”。先选”Gradio”和”Private”，以生成一个可使用的Gradio在线应用：<code>https://huggingface.co/spaces/YourUserName/DemoName</code>。每个项目空间默认免费配备8个CPU核和16GB 运行内存，GPU资源需要单独付费。Each Spaces environment is limited to 16GB RAM, 2 CPU cores and 50GB of (not persistent) disk space by default.<del>感觉这个比github还适合进行代码备份</del></p>
 <p>创建完Space之后，把本地预先构建好的项目文件（UI构建文件必须得命名成app.py且位于根目录）上传到该空间。具体方法与Github项目的上传和版本维护方式完全一样:</p>
 <ul>
 <li>克隆space项目到本地：<code>git clone https://huggingface.co/spaces/your_account/proj_name/tree/main</code></li>
@@ -380,9 +380,19 @@
 </ul>
 </li>
 </ul>
-<p>完成以上步骤后（等待1~2分钟系统刷新），进入Space项目的App选项卡即可查看部署到web端的应用。<br>（<del>学了一阵发现这种方法不适合我，呜呜呜呜呜因为我要20GB运行内存</del>）。</p>
-<p>那接下来需要实现的效果应该是本地运行 Gradio 应用程序，然后通过某个服务对每次运行的程序生成一个序列号，这个序列号最好是一个公网 URL 地址，这样服务器就会通过反向代理的方式将用户的请求转发到我本地的 Gradio 应用程序上。这种实现方式可以使用户在不知道具体本地部署的情况下，通过公共网址轻松地访问 Gradio 应用程序。<br>而目前我的电脑相当于私有地址，那么外部网络中的其他计算机是无法访问我显卡上运行的 Gradio 应用程序。在这种情况下，要做的是端口转发技术：<strong>将服务器的私有地址映射到一定的公开地址上，从而可以在外部网络中访问 Gradio 应用程序。</strong></p>
-<h1 id="3-内外穿透"><a href="#3-内外穿透" class="headerlink" title="3 内外穿透"></a>3 内外穿透</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_15821487/article/details/131494881">https://blog.csdn.net/qq_15821487/article/details/131494881</a><br>常用的一种端口转发技术是 NAT 网络地址转换（Network Address Translation），它可以将服务器的内部 IP 地址映射到一个公共 IP 地址上，并将访问该公共 IP 地址和端口的流量转发到服务器的内部 IP 地址和端口。在 Linux 系统中，可以使用 iptables 工具来进行端口转发和 NAT 配置。</p>
+<p>完成以上步骤后（等待1~2分钟系统刷新），进入Space项目的App选项卡即可查看部署到web端的应用。</p>
+<!-- （~~学了一阵发现这种方法不适合我，呜呜呜呜呜因为CPU好慢啊，跑一张图要1个小时~~）。
+
+那接下来需要实现的效果应该是本地运行 Gradio 应用程序，然后通过某个服务对每次运行的程序生成一个序列号，这个序列号最好是一个公网 URL 地址，这样服务器就会通过反向代理的方式将用户的请求转发到我本地的 Gradio 应用程序上。这种实现方式可以使用户在不知道具体本地部署的情况下，通过公共网址轻松地访问 Gradio 应用程序。
+而目前我的电脑相当于私有地址，那么外部网络中的其他计算机是无法访问我显卡上运行的 Gradio 应用程序。在这种情况下，要做的是端口转发技术：**将服务器的私有地址映射到一定的公开地址上，从而可以在外部网络中访问 Gradio 应用程序。**
+
+# 3 内外穿透
+https://blog.csdn.net/qq_15821487/article/details/131494881
+常用的一种端口转发技术是 NAT 网络地址转换（Network Address Translation），它可以将服务器的内部 IP 地址映射到一个公共 IP 地址上，并将访问该公共 IP 地址和端口的流量转发到服务器的内部 IP 地址和端口。在 Linux 系统中，可以使用 iptables 工具来进行端口转发和 NAT 配置。
+https://blog.csdn.net/wtyuong/article/details/137524656
+https://blog.csdn.net/xyl295528322/article/details/131995889
+https://blog.csdn.net/supperman_009/article/details/130432290
+https://blog.csdn.net/qq_42531954/article/details/133901919 -->
 
                 
               </div>
