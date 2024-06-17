@@ -23,11 +23,13 @@
 <meta property="og:site_name" content="Xi Wang">
 <meta property="og:description" content="图像扭曲是计算机视觉和图像处理中的一个重要概念，它涉及到改变图像的几何形状或位置，使其看起来像是被拉伸、压缩或旋转。">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/vitalemonate/Image-Warping/main/results/forward_warp_vs_inverse_warp.png">
 <meta property="article:published_time" content="2024-06-16T15:06:29.000Z">
-<meta property="article:modified_time" content="2024-06-16T23:39:25.012Z">
+<meta property="article:modified_time" content="2024-06-17T12:18:33.895Z">
 <meta property="article:author" content="Xi Wang">
 <meta property="article:tag" content="Basics">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/vitalemonate/Image-Warping/main/results/forward_warp_vs_inverse_warp.png">
   
   
   
@@ -220,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k words
+          1.9k words
         
       </span>
     
@@ -231,7 +233,7 @@
         
         
         
-          10 mins
+          16 mins
         
       </span>
     
@@ -314,15 +316,15 @@
 </ul>
 </li>
 </ul>
-<p>而在图像处理过程中，移动图像的像素可以分为两个主要步骤：映射（mapping）和重采样（resampling）。这两个步骤是实现图像扭曲、变换或几何校正的关键。</p>
+<p>而在图像处理过程中，空间图像的几何变换包括两个主要步骤：映射（mapping）和重采样（resampling）。这两个步骤是实现图像扭曲、变换或几何校正的关键。</p>
 <ul>
 <li>Move pixels of image <ul>
-<li>Mapping <ul>
+<li>Mapping ：空间坐标变换关系<ul>
 <li>Forward </li>
-<li>Reverse</li>
+<li>Inverse</li>
 </ul>
 </li>
-<li>Resampling <ul>
+<li>Resampling ：变换坐标的赋值、插值运算<ul>
 <li>Point sampling </li>
 <li>Triangle filter </li>
 <li>Gaussian filter</li>
@@ -333,8 +335,52 @@
 </ul>
 <h1 id="Mapping"><a href="#Mapping" class="headerlink" title="Mapping"></a>Mapping</h1><p><strong>映射是确定图像中每个像素在变换后的新位置。</strong>它定义了从原始图像到目标图像的坐标变换关系。这个过程主要关注的是计算像素如何从原始位置移动到新的位置。</p>
 <h2 id="Define-transformation"><a href="#Define-transformation" class="headerlink" title="Define transformation"></a>Define transformation</h2><p>Describe the destination (x,y) for every location (u,v) in the source (or vice-versa, if invertible).</p>
-<h2 id="Example-Mappings"><a href="#Example-Mappings" class="headerlink" title="Example Mappings"></a>Example Mappings</h2><p>变换函数可以是仿射变换、透视变换或其他非线性变换。<br>①Scale<br>②Rptate<br>③Shear<br>④Any function(Fish-eye、Swirl、Rain)</p>
-<h2 id="Image-Warping-Implementation"><a href="#Image-Warping-Implementation" class="headerlink" title="Image Warping Implementation"></a>Image Warping Implementation</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Forward mapping</span><br><span class="hljs-comment">## Iterate over source image</span><br><span class="hljs-comment">### Many source pixels can map to same destination pixel</span><br><span class="hljs-comment">### Some destination pixels may not be covered</span><br><br><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> u = <span class="hljs-number">0</span>; u &lt; umax; u++) &#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> v = <span class="hljs-number">0</span>; v &lt; vmax; v++) &#123;<br>        <span class="hljs-built_in">float</span> x = fx(u,v);<br>        <span class="hljs-built_in">float</span> y = fy(u,v);<br>        dst(x,y) = src(u,v);<br>        &#125;<br>    &#125;<br><br><span class="hljs-comment"># Reverse mapping</span><br><span class="hljs-comment">## Iterate over destination image </span><br><span class="hljs-comment">### Must resample source </span><br><span class="hljs-comment">### May oversample, but much simpler!</span><br><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> x = <span class="hljs-number">0</span>; x &lt; xmax; x++) &#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> y = <span class="hljs-number">0</span>; y &lt; ymax; y++) &#123;<br>        <span class="hljs-built_in">float</span> u = fx^-<span class="hljs-number">1</span>(x,y);<br>        <span class="hljs-built_in">float</span> v = fy^-<span class="hljs-number">1</span>(x,y);<br>        dst(x,y) = src(u,v);<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+<h2 id="Example-Mappings"><a href="#Example-Mappings" class="headerlink" title="Example Mappings"></a>Example Mappings</h2><p>变换函数可以是仿射变换、透视变换或其他非线性变换。</p>
+<ul>
+<li><p>仿射变换（Affine Transformation）：是一类<strong>保持点、直线和线段平行性的变换</strong>。它包括：</p>
+<ul>
+<li>线性变换（如旋转-Rotate、缩放-Scale、剪切-Shear）</li>
+<li>平移-Translation</li>
+</ul>
+</li>
+<li><p>透视变换 （Perspective Transformation）：是用于模拟三维视角效果、图像校正和增强现实的变换。<strong>透视变换是一种保留直线性质的变换。</strong>它能够将直线投影成直线，但不保持平行性，适合处理远近关系。</p>
+</li>
+<li><p>将三维空间中的点投影到二维平面上</p>
+</li>
+<li><p>逆向透视变换 (Inverse Perspective Mapping)：将二维图像中的点映射回三维空间。常用于图像校正、如车道线检测、摄像头标定等</p>
+</li>
+<li><p>非线性变换 （Non-linear Transformation）：非线性变换通常没有固定的公式，可以是任意函数。</p>
+</li>
+<li><p>径向变换（Radial Transformation）：用于校正镜头的径向畸变，如桶形畸变和枕形畸变。<br>$$<br>r{^{‘}}&#x3D;r(1+k_{1}r^{2}+k_{2}r^{4}+k_{3}r^{6})<br>$$<br>​		其中 r 是到图像中心的距离，r′ 是变换后的距离，k1,k2,k3是畸变系数。</p>
+</li>
+<li><p>极坐标变换：常用于全景图像处理和纹理映射。</p>
+</li>
+<li><p>涡旋变换-Swirl：将图像进行旋转扭曲，常用于图像特效。</p>
+</li>
+<li><p>波浪变换-Wave Transformation：用于模拟波浪效果。</p>
+</li>
+<li><p>Rain：雨效应是一种通过在图像上叠加模拟雨滴的效果来生成下雨场景的技术</p>
+</li>
+<li><p>弹性变形（Elastic Deformation）：弹性变形常用于数据增强。通过在图像上应用随机的、局部的位移场来实现，这些位移场通常由高斯滤波器平滑处理后生成，从而生成具有更大多样性的数据集。</p>
+</li>
+<li><p><strong>双曲线变换（Hyperbolic Transformation）</strong>：用于创建各种扭曲和形变效果</p>
+</li>
+<li><p><strong>Fish-eye</strong>：模拟鱼眼镜头效果的非线性变换，使得图像中心区域被放大，而边缘区域被压缩，产生一种球形的视觉效果，属于桶形畸变。</p>
+</li>
+<li><p><strong>光流变换</strong>：用于追踪图像序列中的运动，用于视频处理和运动分析</p>
+</li>
+<li><p><strong>图像网格变形（Mesh Warp Transformation）</strong>：通过在图像上定义控制点和网格，调整控制点来实现变形</p>
+</li>
+<li><p><strong>Thin Plate Spline</strong>：平滑变形，特别是在图像配准和形状匹配中</p>
+</li>
+</ul>
+<h2 id="Image-Warping-Implementation"><a href="#Image-Warping-Implementation" class="headerlink" title="Image Warping Implementation"></a>Image Warping Implementation</h2><p>逆向映射（inverse mapping）通常比前向映射（forward mapping）更有效，主要原因有以下几点：</p>
+<ol>
+<li>forward mapping从源图像空间出发，逐个像素地将其映射到目标图像中。这个过程中，可能会出现一些目标图像像素没有被任何源图像像素映射到，导致空洞问题，需要额外的插值或其他处理方法来填补这些空洞。</li>
+<li>inverse mapping从目标图像空间出发，逐个像素地寻找其在源图像中的对应位置。这样可以确保目标图像的每个像素都被处理到，避免出现空洞（holes）或未填充的像素。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/vitalemonate/Image-Warping/main/results/forward_warp_vs_inverse_warp.png" srcset="/img/loading.gif" lazyload alt="Compare mapping"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Forward mapping</span><br><span class="hljs-comment">## Iterate over source image</span><br><span class="hljs-comment">### Many source pixels can map to same destination pixel</span><br><span class="hljs-comment">### Some destination pixels may not be covered</span><br><br><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> u = <span class="hljs-number">0</span>; u &lt; umax; u++) &#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> v = <span class="hljs-number">0</span>; v &lt; vmax; v++) &#123;<br>        <span class="hljs-built_in">float</span> x = fx(u,v);<br>        <span class="hljs-built_in">float</span> y = fy(u,v);<br>        dst(x,y) = src(u,v);<br>        &#125;<br>    &#125;<br><br><span class="hljs-comment"># Reverse mapping</span><br><span class="hljs-comment">## Iterate over destination image </span><br><span class="hljs-comment">### Must resample source </span><br><span class="hljs-comment">### May oversample, but much simpler!</span><br><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> x = <span class="hljs-number">0</span>; x &lt; xmax; x++) &#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> y = <span class="hljs-number">0</span>; y &lt; ymax; y++) &#123;<br>        <span class="hljs-built_in">float</span> u = fx^-<span class="hljs-number">1</span>(x,y);<br>        <span class="hljs-built_in">float</span> v = fy^-<span class="hljs-number">1</span>(x,y);<br>        dst(x,y) = src(u,v);<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
 
 <h1 id="Resampling"><a href="#Resampling" class="headerlink" title="Resampling"></a>Resampling</h1><p>Evaluate source image at arbitrary (u,v), (u,v) does not usually have integer coordinates.&#x3D;》<strong>重采样是将映射得到的新位置的像素值进行填充。</strong>由于映射后的坐标（x’, y’）通常不是整数坐标，因此需要对这些坐标进行插值以获得最终的像素值。</p>
 <h2 id="香农采样定理"><a href="#香农采样定理" class="headerlink" title="香农采样定理"></a>香农采样定理</h2><p>在实现移动像素的操作时，必须考虑到数字图像是连续图像的采样版本。Sampling是从连续函数中采样离散样本。Reconstrution是从离散样本恢复连续函数。</p>
