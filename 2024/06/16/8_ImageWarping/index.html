@@ -24,8 +24,11 @@
 <meta property="og:description" content="图像扭曲是计算机视觉和图像处理中的一个重要概念，它涉及到改变图像的几何形状或位置，使其看起来像是被拉伸、压缩或旋转。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/vitalemonate/Image-Warping/main/results/forward_warp_vs_inverse_warp.png">
+<meta property="og:image" content="https://legacy.imagemagick.org/Usage/filter/storm_resized.gif">
+<meta property="og:image" content="https://legacy.imagemagick.org/Usage/filter/gray_edge_ringing.gif">
+<meta property="og:image" content="https://legacy.imagemagick.org/Usage/filter/rings_resize.png">
 <meta property="article:published_time" content="2024-06-16T15:06:29.000Z">
-<meta property="article:modified_time" content="2024-06-17T12:18:33.895Z">
+<meta property="article:modified_time" content="2024-06-20T15:17:15.655Z">
 <meta property="article:author" content="Xi Wang">
 <meta property="article:tag" content="Basics">
 <meta name="twitter:card" content="summary_large_image">
@@ -282,6 +285,7 @@
 <ul>
 <li><input checked="" disabled="" type="checkbox"> <a target="_blank" rel="noopener" href="https://www.cs.princeton.edu/courses/archive/fall00/cs426/lectures/warp/warp.pdf">C0S 426, Fall 2000</a></li>
 <li><input checked="" disabled="" type="checkbox"> <a target="_blank" rel="noopener" href="https://www.cs.princeton.edu/courses/archive/spring22/cos426/lectures/Lecture-2.pdf">C0S 426, Spring 2022</a></li>
+<li><input checked="" disabled="" type="checkbox"> <a target="_blank" rel="noopener" href="https://legacy.imagemagick.org/Usage/filter/">Resampling filters</a></li>
 </ul>
 <h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><p>图像预处理操作包括五大类内容。</p>
 <ul>
@@ -351,7 +355,7 @@
 </li>
 <li><p>非线性变换 （Non-linear Transformation）：非线性变换通常没有固定的公式，可以是任意函数。</p>
 </li>
-<li><p>径向变换（Radial Transformation）：用于校正镜头的径向畸变，如桶形畸变和枕形畸变。<br>$$<br>r{^{‘}}&#x3D;r(1+k_{1}r^{2}+k_{2}r^{4}+k_{3}r^{6})<br>$$<br>​		其中 r 是到图像中心的距离，r′ 是变换后的距离，k1,k2,k3是畸变系数。</p>
+<li><p>径向变换（Radial Transformation）：用于校正镜头的径向畸变，如桶形畸变和枕形畸变。</p>
 </li>
 <li><p>极坐标变换：常用于全景图像处理和纹理映射。</p>
 </li>
@@ -383,6 +387,16 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Forward mapping</span><br><span class="hljs-comment">## Iterate over source image</span><br><span class="hljs-comment">### Many source pixels can map to same destination pixel</span><br><span class="hljs-comment">### Some destination pixels may not be covered</span><br><br><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> u = <span class="hljs-number">0</span>; u &lt; umax; u++) &#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> v = <span class="hljs-number">0</span>; v &lt; vmax; v++) &#123;<br>        <span class="hljs-built_in">float</span> x = fx(u,v);<br>        <span class="hljs-built_in">float</span> y = fy(u,v);<br>        dst(x,y) = src(u,v);<br>        &#125;<br>    &#125;<br><br><span class="hljs-comment"># Reverse mapping</span><br><span class="hljs-comment">## Iterate over destination image </span><br><span class="hljs-comment">### Must resample source </span><br><span class="hljs-comment">### May oversample, but much simpler!</span><br><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> x = <span class="hljs-number">0</span>; x &lt; xmax; x++) &#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> y = <span class="hljs-number">0</span>; y &lt; ymax; y++) &#123;<br>        <span class="hljs-built_in">float</span> u = fx^-<span class="hljs-number">1</span>(x,y);<br>        <span class="hljs-built_in">float</span> v = fy^-<span class="hljs-number">1</span>(x,y);<br>        dst(x,y) = src(u,v);<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
 
 <h1 id="Resampling"><a href="#Resampling" class="headerlink" title="Resampling"></a>Resampling</h1><p>Evaluate source image at arbitrary (u,v), (u,v) does not usually have integer coordinates.&#x3D;》<strong>重采样是将映射得到的新位置的像素值进行填充。</strong>由于映射后的坐标（x’, y’）通常不是整数坐标，因此需要对这些坐标进行插值以获得最终的像素值。</p>
+<h2 id="Resampling-Artefacts"><a href="#Resampling-Artefacts" class="headerlink" title="Resampling Artefacts"></a>Resampling Artefacts</h2><p><img src="https://legacy.imagemagick.org/Usage/filter/storm_resized.gif" srcset="/img/loading.gif" lazyload alt="Blocking"><img src="https://legacy.imagemagick.org/Usage/filter/gray_edge_ringing.gif" srcset="/img/loading.gif" lazyload alt="Ringing_1"><img src="https://legacy.imagemagick.org/Usage/filter/rings_resize.png" srcset="/img/loading.gif" lazyload alt="Aliasing"></p>
+<ol>
+<li><h3 id="Blocking"><a href="#Blocking" class="headerlink" title="Blocking"></a>Blocking</h3><p>The primary cause of ‘blocking’ is either badly anti-aliased source image, or not enough smoothing (color mixing or blurring) between pixels to improve the overall look of an image.</p>
+</li>
+<li><h3 id="Ringing"><a href="#Ringing" class="headerlink" title="Ringing"></a>Ringing</h3><p>Ringing is an effect you often see in very low quality JPEG images close to sharp edges. It is typically caused by an edge being over compensated for by the resize or image compression algorithm, or a high quality filter being used with a bad support size.</p>
+</li>
+<li><h3 id="Aliasing-and-Moire-Effects"><a href="#Aliasing-and-Moire-Effects" class="headerlink" title="Aliasing and Moiré Effects"></a>Aliasing and Moiré Effects</h3><p>Aliasing effects are generally seen as the production of ‘staircase’ like effects along edges of images. </p>
+</li>
+<li><h3 id="Blurring"><a href="#Blurring" class="headerlink" title="Blurring"></a>Blurring</h3></li>
+</ol>
 <h2 id="香农采样定理"><a href="#香农采样定理" class="headerlink" title="香农采样定理"></a>香农采样定理</h2><p>在实现移动像素的操作时，必须考虑到数字图像是连续图像的采样版本。Sampling是从连续函数中采样离散样本。Reconstrution是从离散样本恢复连续函数。</p>
 <p>采样点太少会发生Aliasing: high frequencies masquerade as low ones。具体而言，会发生Spatial aliasing（due to limited spatial resolution）、Temporal aliasing（ due to limited temporal resolution）和Missing Image Detail.</p>
 <p><strong>Sampling rate must be &gt; 2 bandwidth.</strong></p>
@@ -394,10 +408,26 @@
 <p>香农采样定理里面提到“采样频率等于有效信号频率的两倍”很关键。如果我们采样的频率过慢，就会导致有多条函数经过采样点进而导致采样点对应的时序函数结果不唯一，所以要提高采样频率。</p>
 <p>香农采样定理跟图像的联系是自然而然的。图像本身也是现实世界在计算机中的一种离散表示，所以图像在经过傅里叶变换之后能够被表示为某种时域函数（一堆正弦或余弦函数的叠加），那图像处理中的香农采样定理，就可以表示为：当我们使用高于最高频率2倍的频率对图像进行采样时，能够正确完整的复原图像。</p>
 <p>Resample &#x3D; Reconstruct + Transform + Filter + Sample. 重新采样过程中往往通过卷积操作平滑信号或图像，滤除高频成分，防止伪影的产生，从而实现有效的重新采样。</p>
-<h2 id="Point-sampling"><a href="#Point-sampling" class="headerlink" title="Point sampling"></a>Point sampling</h2><p>Take value at closest pixel: This method is simple, but it causes aliasing</p>
-<h2 id="Triangle-filter"><a href="#Triangle-filter" class="headerlink" title="Triangle filter"></a>Triangle filter</h2><p>Convolve with triangle filte: Bilinearly interpolate four closest pixels.</p>
-<h2 id="Gaussian-filter"><a href="#Gaussian-filter" class="headerlink" title="Gaussian filter"></a>Gaussian filter</h2><p>Convolve with Gaussian filter: Compute weighted sum of pixel neighborhood. </p>
-<h2 id="Image-Warping-Implementation-1"><a href="#Image-Warping-Implementation-1" class="headerlink" title="Image Warping Implementation"></a>Image Warping Implementation</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">Reverse mapping:<br><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> x = <span class="hljs-number">0</span>; x &lt; xmax; x++) &#123;<br><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> y = <span class="hljs-number">0</span>; y &lt; ymax; y++) &#123;<br><span class="hljs-built_in">float</span> u = fx<br>-<span class="hljs-number">1</span>(x,y);<br><span class="hljs-built_in">float</span> v = fy<br>-<span class="hljs-number">1</span>(x,y);<br>dst(x,y) = resample_src(u,v,w);<br>&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>What is done is to try to use some type of weighted average of the original source pixel values to determine a good value for the new pixel. The real pixels surrounding the location of the new pixel forms a ‘neighbourhood’ of contributing values. The larger this neighbourhood is the slower the resize. This is a technique called <a target="_blank" rel="noopener" href="https://legacy.imagemagick.org/Usage/convolve/#intro">Convolution</a>.</li>
+</ul>
+<h2 id="Sampling-operation"><a href="#Sampling-operation" class="headerlink" title="Sampling operation"></a>Sampling operation</h2><h3 id="Point-sampling"><a href="#Point-sampling" class="headerlink" title="Point sampling"></a>Point sampling</h3><p>Interpolation is usually only used for ‘point’ sampling images, when image scaling is either not known or needed. For example, when rotating image or minor distortions, the image’s scaling or size does not change, and as such an interpolation can produce a reasonable result, though not a very accurate one.  </p>
+<p>Take value at closest pixel: This method is simple, but it causes  Aliasing and Moiré Effects.</p>
+<ul>
+<li>Box: just directly averaging the nearby pixels together</li>
+</ul>
+<h3 id="Triangle-filter"><a href="#Triangle-filter" class="headerlink" title="Triangle filter"></a>Triangle filter</h3><p>The ‘<strong>Triangle</strong>‘ or ‘<strong>Bilinear</strong>‘ interpolation filter just takes the interpolation of the nearest neighbourhood one step further, it weights them according to how close the new pixels position is to the the original pixels within the neighbourhood (or ‘<em>support</em>‘ region). The closer the new pixel is to a source image pixel, the more color that pixel contributes.</p>
+<p>Convolve with triangle filte: Bilinearly interpolate four closest pixels.</p>
+<h3 id="Other-Interpolated-Filters"><a href="#Other-Interpolated-Filters" class="headerlink" title="Other Interpolated Filters"></a>Other Interpolated Filters</h3><ul>
+<li>Hermite</li>
+<li>Lagrange</li>
+<li>Catrom (Catmull-Rom) filter is a well known standard <a target="_blank" rel="noopener" href="https://legacy.imagemagick.org/Usage/filter/#cubics">Cubic Filter</a> often used as an interpolation function</li>
+</ul>
+<h3 id="Gaussian-filter"><a href="#Gaussian-filter" class="headerlink" title="Gaussian filter"></a>Gaussian filter</h3><p>Convolve with Gaussian filter: Compute weighted sum of pixel neighborhood. </p>
+<ul>
+<li>Gaussian Interpolator Filter Variant</li>
+</ul>
+<h2 id="Image-Warping-Implementation-1"><a href="#Image-Warping-Implementation-1" class="headerlink" title="Image Warping Implementation"></a>Image Warping Implementation</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python">Reverse mapping:<br><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> x = <span class="hljs-number">0</span>; x &lt; xmax; x++) &#123;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> y = <span class="hljs-number">0</span>; y &lt; ymax; y++) &#123;<br>		<span class="hljs-built_in">float</span> u = fx^-<span class="hljs-number">1</span>(x,y);<br>		<span class="hljs-built_in">float</span> v = fy^-<span class="hljs-number">1</span>(x,y);<br>		dst(x,y) = resample_src(u,v,w);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
