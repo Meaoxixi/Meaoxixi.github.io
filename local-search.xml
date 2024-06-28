@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>PyTorch_《Grokking Deep Learning》</title>
+    <link href="/2024/06/28/0_Pytorch_2/"/>
+    <url>/2024/06/28/0_Pytorch_2/</url>
+    
+    <content type="html"><![CDATA[<p>本篇章主要记录的是学习《<a href="https://pytorch.org/tutorials/">Grokking Deep Learning</a>》的收获。是Pytorch探索之旅的第3篇章啦！</p><span id="more"></span><p>Reference materials include:</p><!-- - 清华翻译的[《Deep learning with PyTorch》](https://tangshusen.me/Deep-Learning-with-PyTorch-Chinese/)- [PyTorch官方文档(中文版)](https://pytorch-cn.readthedocs.io/zh/latest/): 我感觉这个文档的好处在于非常详尽的给出相关函数和模块的细致化定义介绍- [Tutorials](https://pytorch.org/tutorials/)：感觉官网的这个文档是从Pytorch的使用框架去简要介绍 --><ul><li>Andrew W. Traska撰写的<a href="https://www.manning.com/books/grokking-deep-learning">《Grokking Deep Learning》</a>是开发强大模型和理解深度神经网络基础机制的重要资源</li><li><a href="https://www.codecademy.com/learn">Codecademy</a>:发现一个学python的在线平台，感觉很不错。交互性质很强。</li><li><a href="https://github.com/Mikoto10032/DeepLearning">Github上一个关于深度学习的教程资料库</a></li><li><a href="https://github.com/bat67/pytorch-tutorials-examples-and-books">Github上分析Pytorch源码的库</a></li><li>Ian Goodfellow, Yoshua Bengio和Aaron Courville的<a href="https://www.deeplearningbook.org/">《Deep Learning》</a></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Tutorial</category>
+      
+      <category>PyTorch</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>PyTorch</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>How to research</title>
     <link href="/2024/06/21/4_how_to_research/"/>
     <url>/2024/06/21/4_how_to_research/</url>
